@@ -78,7 +78,7 @@ app.put('/api/v1/sensores', async (req, res)=> {
     }
 
 })
-
+//
 app.delete('/api/v1/sensores/:id', async (req, res) => {
     try {
         const { id } = req.params;
