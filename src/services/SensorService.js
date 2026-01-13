@@ -53,6 +53,25 @@ class SensorService {
         return sensores[sensorIndex];
     }
 
+    //delete
+    async deleteSensor(id) {
+        // ler sensores do arquivo
+        const sensores = await readSensorFile();
+
+        // procurar índice do sensor
+        const sensorIndex = sensores.findIndex(sensor => sensor.id === id);
+        if (sensorIndex === -1) {
+            throw new Error("Sensor não encontrado");
+        }
+
+        // remover sensor
+        const sensorRemovido = sensores.splice(sensorIndex, 1);
+
+        // salvar arquivo atualizado
+        await writeSensorFile(sensores);
+        return sensorRemovido[0];
+    }
+
 
 }
 
