@@ -1,7 +1,7 @@
 import express from 'express';
 import { readSensorFile, writeSensorFile } from './utils/sensorFile.js';
 
-
+// teste de git
 //express
 const app = express();
 // habilitando o json
