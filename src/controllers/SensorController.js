@@ -17,6 +17,8 @@ class SensorController {
 
     // create - POST -
     create = async (req, res) => {
+        //capturando os dados da requisição
+        const body = req.body;
 
     }
 
