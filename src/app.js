@@ -118,5 +118,4 @@ app.delete('/api/v1/sensores/:id', async (req, res) => {
 //criar o servidor
 app.listen(PORT, () => {
     console.log(`Servidor rodando na porta: ${PORT}`);
-
 })
