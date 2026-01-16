@@ -1,13 +1,8 @@
-import { Router } from "express";
-import { sensorController } from "../controllers/SensorController.js";
+const express = require('express');
+const router = express.Router();
+const sensorController = require('../controllers/SensorController');
 
-const sensorRouter = Router();
+router.put('/sensor/:id', sensorController.update);
+router.delete('/sensor/:id', sensorController.delete);
 
-sensorRouter.get("/sensor", sensorController.getlistagemSensor);
-sensorRouter.post("/sensor", sensorController.create);
-sensorRouter.put("/sensor", sensorController.update);
-sensorRouter.delete("/sensor", sensorController.delete);
-// sensorRouter.post(sensorController.create);
-
-
-export default sensorRouter;
+module.exports = router;

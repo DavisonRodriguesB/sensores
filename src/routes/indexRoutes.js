@@ -1,11 +1,10 @@
-import { Router } from "express";
-import sensorRouter from "./sensorRoutes.js";
+const express = require('express');
+const indexRouter = express.Router();
 
-const indexRouter =  Router();
+const sensorRoutes = require('./sensorRoutes');
+const userRoutes = require('./userRoutes');
 
-// Usando as rotas que estão dentro de sensorRouter;
-//indexRouter.use("/sensor",sensorRouter);
+indexRouter.use(sensorRoutes);
+indexRouter.use(userRoutes);
 
-indexRouter.use(sensorRouter);
-
-export default indexRouter;
+module.exports = indexRouter;

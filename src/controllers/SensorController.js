@@ -1,51 +1,31 @@
-import { sensorService } from "../services/SensorService.js";
+const sensorService = require('../services/SensorService');
 
 class SensorController {
-    
-    constructor(sensorService) {
-        this.service = sensorService;
 
+  update(req, res) {
+    try {
+      const { id } = req.params;
+      const dados = req.body;
+
+      const sensorAtualizado = sensorService.updateSensor(id, dados);
+      res.status(200).json(sensorAtualizado);
+
+    } catch (error) {
+      res.status(404).json({ erro: error.message });
     }
+  }
 
-    // Read - GET
-    getlistagemSensor = async (req, res) => {
-        try {
-            const sensores = await this.service.getAllSensor();
-            res.status(200).json({ status: "success", data: sensores })
-        } catch (error) {
-            console.log(error.message);
-            res.status(500).json({ 
-                status: "fail", 
-                message: "Erro interno ao consulta base de dados"
-            })
-        }
+  delete(req, res) {
+    try {
+      const { id } = req.params;
+
+      const resposta = sensorService.deleteSensor(id);
+      res.status(200).json(resposta);
+
+    } catch (error) {
+      res.status(404).json({ erro: error.message });
     }
-
-    // Create - POST
-    create = async (req, res) => {
-        // Captura os dados da requisição;
-
-        const body = req.body; 
-        try {
-            const sensor = await this.service.newSensor(body);
-            res.status(201).json({ status: "success", data: sensor });
-        } catch (error) {
-            console.log(error);
-            res.status(500).json({ status: "fail", message: "Erro interno" })
-        }
-
-    }
-
-    // Update - PUT
-    update = async (req, res) => {
-
-    }
-
-    // Delete - DELETE
-    delete = async (req, res) => {
-
-    }
-
+  }
 }
 
-export const sensorController = new SensorController(sensorService)
+module.exports = new SensorController();

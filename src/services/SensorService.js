@@ -1,78 +1,43 @@
-import { readSensorFile, writeSensorFile } from "../utils/sensorFile.js";
+const sensorFile = require('../utils/userFile');
 
 class SensorService {
 
-    async getAllSensor(){
-        const sensores = await readSensorFile();
-        return sensores;
+  getAll() {
+    return sensorFile.read();
+  }
+
+  updateSensor(id, novosDados) {
+    const sensores = sensorFile.read();
+
+    const index = sensores.findIndex(sensor => sensor.id === Number(id));
+
+    if (index === -1) {
+      throw new Error('Sensor não encontrado');
     }
 
-    // create
-    async newSensor(data) {
-        const { id, localizacao, temp } = data;
-        //chama a lista de sensores
-        const sensores = await readSensorFile();
+    sensores[index] = {
+      ...sensores[index],
+      ...novosDados
+    };
 
-        //verificar se o id foi passado
-        if (!id) {
-            throw new Error("ID obrigatório");
-        }
-        
-        //verificar se o sensor já existe na lista    
-        const sensorExists = sensores.find(sensor => sensor.id === id);
-        if (sensorExists) {
-            throw new Error("Sensor com este ID já existe");
-        }
+    sensorFile.write(sensores);
+    return sensores[index];
+  }
 
-        //todos devem possuir mais de 4 caracteres
-        if (id.length < 4) {
-            throw new Error("ID deve possuir mais de 4 caracteres");
-        }
+  deleteSensor(id) {
+    const sensores = sensorFile.read();
 
-        //montar o objeto
-        const sensor = { id, localizacao, temp };
-        sensores.push(sensor);
-        await writeSensorFile(sensores);
-        return sensor;
+    const novaLista = sensores.filter(
+      sensor => sensor.id !== Number(id)
+    );
+
+    if (novaLista.length === sensores.length) {
+      throw new Error('Sensor não encontrado');
     }
 
-
-    //update
-    async updateSensor(id, data) {
-        const { localizacao, temp } = data;
-        const sensores = await readSensorFile();
-
-        const sensorIndex = sensores.findIndex(sensor => sensor.id === id);
-        if (sensorIndex === -1) {
-            throw new Error("Sensor não encontrado");
-        }
-
-        //atualizar os dados
-        sensores[sensorIndex] = { id, localizacao, temp };
-        await writeSensorFile(sensores);
-        return sensores[sensorIndex];
-    }
-
-    //delete
-    async deleteSensor(id) {
-        // ler sensores do arquivo
-        const sensores = await readSensorFile();
-
-        // procurar índice do sensor
-        const sensorIndex = sensores.findIndex(sensor => sensor.id === id);
-        if (sensorIndex === -1) {
-            throw new Error("Sensor não encontrado");
-        }
-
-        // remover sensor
-        const sensorRemovido = sensores.splice(sensorIndex, 1);
-
-        // salvar arquivo atualizado
-        await writeSensorFile(sensores);
-        return sensorRemovido[0];
-    }
-
-
+    sensorFile.write(novaLista);
+    return { mensagem: 'Sensor removido com sucesso' };
+  }
 }
 
-export const sensorService = new SensorService();
+module.exports = new SensorService();
